@@ -4,7 +4,6 @@ import 'package:task_managment/Domain/model/task_model.dart';
 import 'package:task_managment/Presentation/Widgets/AddTask/add_task.dart';
 
 class AddTaskController {
-  final TextEditingController taskController = TextEditingController();
   DateTime? selectedDate;
   final ValueNotifier<List<Task>> taskNotifier = ValueNotifier([]);
 
@@ -19,11 +18,16 @@ class AddTaskController {
     taskNotifier.value = box.values.toList();
   }
 
-  Future<void> editTask(dynamic task, context) async {
+  Future<void> editTask(
+    task,
+    context,
+  ) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AddTaskScreen(task: task),
+        builder: (context) => AddTaskScreen(
+          task: task,
+        ),
       ),
     );
 
@@ -32,8 +36,8 @@ class AddTaskController {
     }
   }
 
-  Future<void> submitTask(widget, context) async {
-    if (taskController.text.isEmpty || selectedDate == null) {
+  Future<void> submitTask(context, widget, taskcontroller) async {
+    if (taskcontroller.text.isEmpty || selectedDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Please enter task and select a date')),
       );
@@ -42,7 +46,7 @@ class AddTaskController {
 
     final box = Hive.box<Task>('tasks');
     final newTask = Task(
-      description: taskController.text,
+      description: taskcontroller.text,
       date: selectedDate!,
     );
 
@@ -51,7 +55,7 @@ class AddTaskController {
       await box.add(newTask);
     } else {
       // Edit task
-      await box.putAt(widget.index!, newTask);
+      await box.putAt(widget.task.key, newTask);
     }
 
     taskNotifier.value = box.values.toList(); // Update notifier

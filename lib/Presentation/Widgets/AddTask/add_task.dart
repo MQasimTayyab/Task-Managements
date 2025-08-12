@@ -24,17 +24,17 @@ class AddTaskScreen extends StatefulWidget {
 class _AddTaskScreenState extends State<AddTaskScreen> {
   AddTaskController controller = AddTaskController();
   final TextEditingController _taskController = TextEditingController();
-  // DateTime? selectedDate;
+  DateTime? selectedDate;
   // final ValueNotifier<List<Task>> taskNotifier = ValueNotifier([]);
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   if (widget.task != null) {
-  //     _taskController.text = widget.task!.description;
-  //     selectedDate = widget.task!.date;
-  //   }
-  // }
+  @override
+  void initState() {
+    super.initState();
+    if (widget.task != null) {
+      _taskController.text = widget.task!.description;
+      selectedDate = widget.task!.date;
+    }
+  }
 
   // Future<void> _submitTask() async {
   //   if (_taskController.text.isEmpty || selectedDate == null) {
@@ -112,7 +112,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             SizedBox(height: 24),
             ElevatedButton(
               onPressed: () {
-                controller.submitTask(context, widget);
+                controller.submitTask(context, widget, _taskController);
               },
               child: Text(widget.task == null ? 'Save Task' : 'Update Task'),
             ),

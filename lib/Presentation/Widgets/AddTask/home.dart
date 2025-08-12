@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    controller.loadTasks;
+    controller.loadTasks();
   }
 
   // final ValueNotifier<List<Task>> taskNotifier = ValueNotifier([]);
