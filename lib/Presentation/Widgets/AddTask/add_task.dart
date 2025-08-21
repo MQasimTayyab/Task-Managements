@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:task_managment/Presentation/Widgets/AddTask/add_task_controller.dart';
 
-import 'package:task_managment/Presentation/Widgets/DataShow/datashow.dart';
-
 import 'package:task_managment/Domain/model/task_model.dart';
-
 import 'package:task_managment/Presentation/Widgets/Product/productshow.dart';
-
-import 'package:task_managment/Presentation/Widgets/ShowTask/show_userprof.dart';
-import 'package:task_managment/Presentation/Widgets/ShowTask/showtask.dart';
+import 'package:task_managment/Provider/provider_tast.dart';
 
 class AddTaskScreen extends StatefulWidget {
   final Task? task;
-  final int? index;
 
-  const AddTaskScreen({super.key, this.task, this.index});
+  const AddTaskScreen({super.key, this.task});
 
   @override
   State<AddTaskScreen> createState() => _AddTaskScreenState();
@@ -24,46 +19,19 @@ class AddTaskScreen extends StatefulWidget {
 class _AddTaskScreenState extends State<AddTaskScreen> {
   AddTaskController controller = AddTaskController();
   final TextEditingController _taskController = TextEditingController();
-  DateTime? selectedDate;
-  // final ValueNotifier<List<Task>> taskNotifier = ValueNotifier([]);
 
   @override
   void initState() {
     super.initState();
     if (widget.task != null) {
       _taskController.text = widget.task!.description;
-      selectedDate = widget.task!.date;
+      controller.selectedDate = widget.task!.date;
     }
   }
 
-  // Future<void> _submitTask() async {
-  //   if (_taskController.text.isEmpty || selectedDate == null) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Please enter task and select a date')),
-  //     );
-  //     return;
-  //   }
-
-  //   final box = Hive.box<Task>('tasks');
-  //   final newTask = Task(
-  //     description: _taskController.text,
-  //     date: selectedDate!,
-  //   );
-
-  //   if (widget.task == null) {
-  //     // Add new task
-  //     await box.add(newTask);
-  //   } else {
-  //     // Edit task
-  //     await box.putAt(widget.index!, newTask);
-  //   }
-
-  //   taskNotifier.value = box.values.toList(); // Update notifier
-  //   Navigator.pop(context, true);
-  // }
-
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<TaskProvider>(context);
     return Scaffold(
       appBar:
           AppBar(title: Text(widget.task == null ? 'Add Task' : 'Edit Task')),
@@ -116,49 +84,36 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               },
               child: Text(widget.task == null ? 'Save Task' : 'Update Task'),
             ),
-
-            //  ElevatedButton(
-            //  onPressed: _submitTask,
-            //   child: Text('Save Task'),
-            // ),
             SizedBox(height: 20),
-
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ShowTaskScreen()));
-                },
-                child: Text('usermodel')),
-            SizedBox(height: 10),
-            ElevatedButton(
-                onPressed: () {
-                  // List<DataShowModel> data = dataShows;
-                  // print(data);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Datashow()));
-                },
-                child: Text('showdata')),
-            SizedBox(height: 10),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Productshow()));
-                  // List<Product> prod = productShows;
-                  // print(prod);
-                  // log('error');
-                },
-                child: Text('product')),
-            SizedBox(height: 10),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ShowUserprof()));
-                  //   List<UserprofModel> user = userProfiles;
-                  //   print(user);
-                },
-                child: Text('product'))
+            // ElevatedButton(
+            //     onPressed: () {
+            //       Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //               builder: (context) => ShowTaskScreen()));
+            //     },
+            //     child: Text('usermodel')),
+            // SizedBox(height: 10),
+            // ElevatedButton(
+            //     onPressed: () {
+            //       Navigator.push(context,
+            //           MaterialPageRoute(builder: (context) => Datashow()));
+            //     },
+            //     child: Text('showdata')),
+            // SizedBox(height: 10),
+            // ElevatedButton(
+            //     onPressed: () {
+            //       Navigator.push(context,
+            //           MaterialPageRoute(builder: (context) => Productshow()));
+            //     },
+            //     child: Text('product')),
+            // SizedBox(height: 10),
+            // ElevatedButton(
+            //     onPressed: () {
+            //       Navigator.push(context,
+            //           MaterialPageRoute(builder: (context) => Productshow()));
+            //     },
+            //     child: Text('product'))
           ],
         ),
       ),

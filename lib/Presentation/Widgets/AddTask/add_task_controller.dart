@@ -7,11 +7,6 @@ class AddTaskController {
   DateTime? selectedDate;
   final ValueNotifier<List<Task>> taskNotifier = ValueNotifier([]);
 
-  Future<void> loadTasks() async {
-    final box = Hive.box('tasks');
-    taskNotifier.value = box.values.toList() as List<Task>;
-  }
-
   Future<void> deleteTask(int index) async {
     final box = Hive.box<Task>('tasks');
     await box.delete(index);
@@ -31,9 +26,7 @@ class AddTaskController {
       ),
     );
 
-    if (result == true) {
-      loadTasks();
-    }
+    if (result == true) {}
   }
 
   Future<void> submitTask(context, widget, taskcontroller) async {
@@ -55,10 +48,12 @@ class AddTaskController {
       await box.add(newTask);
     } else {
       // Edit task
-      await box.putAt(widget.task.key, newTask);
+      print(widget.task.key);
+      await box.put(widget.task.key, newTask);
     }
+    //    taskNotifier.value = List.from(box.values);
 
-    taskNotifier.value = box.values.toList(); // Update notifier
+    // taskNotifier.value = box.values.toList(); // Update notifier
     Navigator.pop(context, true);
   }
 }
